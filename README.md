@@ -1,4 +1,4 @@
-# **Traffic Sign Recognition**
+# **Traffic Sign Recognition using a Neural Net**
 
 ## Writeup
 
@@ -11,26 +11,7 @@ The goals / steps of this project were the following:
 * Use the model to make predictions on new images
 * Analyze the softmax probabilities of the new images
 
-### The Jupyter Notebook containing the implemented network can be found [here](Traffic_Sign_Classifier.ipynb).
-
-
-<!-- [//]: # (Image References)
-
-[image1]: ./examples/visualization.jpg "Visualization"
-[image2]: ./examples/grayscale.jpg "Grayscaling"
-[image3]: ./examples/random_noise.jpg "Random Noise"
-[image4]: ./examples/placeholder.png "Traffic Sign 1"
-[image5]: ./examples/placeholder.png "Traffic Sign 2"
-[image6]: ./examples/placeholder.png "Traffic Sign 3"
-[image7]: ./examples/placeholder.png "Traffic Sign 4"
-[image8]: ./examples/placeholder.png "Traffic Sign 5" -->
-
-<!-- ## Rubric Points
-### Here I will consider the [rubric points](https://review.udacity.com/#!/rubrics/481/view) individually and describe how I addressed each point in my implementation. -->
-
-
-
-You're reading it! and here is a link to my [project code](https://github.com/udacity/CarND-Traffic-Sign-Classifier-Project/blob/master/Traffic_Sign_Classifier.ipynb)
+#### The Jupyter Notebook containing the implemented network can be found [here](Traffic_Sign_Classifier.ipynb).
 
 ### Data Set Summary & Exploration
 
@@ -45,7 +26,7 @@ You're reading it! and here is a link to my [project code](https://github.com/ud
 For any sort of data classification problem, it's helpful if the provided dataset
 has an equal distribution of classes. Unfortunately, this is not the case here:
 
-![alt text][images/hist.png]
+![alt text](images/hist.png)
 
 As you can see, some classes have 2,000+ images, and some have barely 200. This
 may prove to be an issue during training.
@@ -124,11 +105,13 @@ Based on these numbers and with minimal data preprocessing, it seems that the Le
 
 Here are five German traffic signs that I found on the web:
 
-![alt text][signs/1.jfif] ![alt text][signs/14.jfif] ![alt text][signs/25.jfif]
-![alt text][signs/33.jfif] ![alt text][signs/40.jfif]
+![alt text](signs/1.jfif)
+![alt text](signs/14.jfif)
+![alt text](signs/25.jfif)
+![alt text](signs/33.jfif)
+![alt text](signs/40.jfif)
 
 These signs are nonideal, as they are significantly cleaner than the images I have seen in the original dataset, and are also watermarked. It'll be interesting to see how the network handles them.
-
 
 #### Prediction on new images
 
@@ -136,17 +119,17 @@ Here are the results of the prediction:
 
 | Image                 |     Prediction                                |
 |:---------------------:|:---------------------------------------------:|
-| 30 km/h               | 30km/h                                        |
+| 30 km/h               | 30 km/h                                       |
 | Stop sign             | Stop sign                                     |
 | Road work             | Road work                                     |
 | Turn right ahead      | Priority road                                 |
 | Roundabout mandatory  | Priority road                                 |
 
-#### 60% accuracy
+3 our of the 5 images were correctly classified: 60% accuracy.
 
 Interestingly, the model incorrectly predicted both sign 4 and 5 to be a priority road sign. Looking at the included `csv` file and checking the class representation histogram, we can see that Priority road is class 12. The histogram shows that class 12 is heavily overrepresented, which may be why it was misclassified.
 
-#### 3. Describe how certain the model is when predicting on each of the five new images by looking at the softmax probabilities for each prediction. Provide the top 5 softmax probabilities for each image along with the sign type of each probability. (OPTIONAL: as described in the "Stand Out Suggestions" part of the rubric, visualizations can also be provided such as bar charts)
+#### Prediction of the five new images
 
 *First Image*
 
@@ -188,7 +171,7 @@ The model is rather unconfident here -- it manages to successfully classify the 
 
 *Fourth Image*
 
-The model is the most unconfident here, as s
+The model is the most unconfident here, with only 18% confidence in its pick. The top five picks only sum up to be 53%, meaning that almost half of its prediction is spent further on down the line. Instead of a clean pick, the model is scattering its prediction across a great deal of classes. This is a great example of something the model has a lot of trouble with.
 
 | Probability           |     Prediction                                |
 |:---------------------:|:---------------------------------------------:|
@@ -198,20 +181,22 @@ The model is the most unconfident here, as s
 | .07                   | Turn left ahead                               |
 | .07                   | Beware of ice                                 |
 
+*Fifth Image*
 
-TopKV2(values=array([
-       [ 0.7802524 ,  0.05389767,  0.05094699,  0.03012216,  0.02999884],
-       [ 0.82714039,  0.08114917,  0.05321359,  0.00913313,  0.00843911],
-       [ 0.56387508,  0.36709324,  0.0376259 ,  0.0097688 ,  0.00720833],
-       [ 0.18820699,  0.122809  ,  0.09353912,  0.07572132,  0.07135051],
-       [ 0.83938819,  0.04383087,  0.04247151,  0.01763812,  0.0109753 ]], dtype=float32), indices=array([
-       [ 1,  4,  2,  5,  0],
-       [14, 34, 38, 35, 13],
-       [25, 21, 30, 19, 31],
-       [12, 40, 11, 34, 30],
-       [12, 40, 17,  1, 13]], dtype=int32))
+The model is the most confident out of all the five images. Unfortunately, it is confidently wrong. It think the sign is "Priority road", but it really is "Roundabout mandatory". It only gave "Roundabout mandatory" a 4% score.
 
-### (Optional) Visualizing the Neural Network (See Step 4 of the Ipython notebook for more details)
-#### 1. Discuss the visual output of your trained network's feature maps. What characteristics did the neural network use to make classifications?
+It's interesting to visually compare the 5th and 4th images -- they're somewhat similar, the only difference being the arrows. And yet, that's plenty of difference to the model: we see a massive difference in prediction distribution.
 
+| Probability           |     Prediction                                |
+|:---------------------:|:---------------------------------------------:|
+| .83                   | Priority road                                 |
+| .04                   | Roundabout mandatory                          |
+| .04                   | No entry                                      |
+| .01                   | 30km/h                                        |
+| .01                   | Yield                                         |
 
+### Closing
+
+This was a great "Hello World" to neural nets. I was simultaneously introduced to their power and the confusion that comes when training it. I now have a bit more understanding of what people mean when they say it's a black box -- but more importantly, I have a bit more understanding of how that black box works. I was skeptical of dropout layers at first, but my biggest regret is not adding them sooner. I didn't think they'd help, but I was amazed at how much they did.
+
+I'll be doing a lot more deep learning in the next few months, and I'm very excited to continue this journey with Udacity and USF.
